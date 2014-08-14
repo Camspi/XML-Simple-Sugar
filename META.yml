@@ -1,0 +1,26 @@
+---
+abstract: 'Sugar sprinkled on XML::Simple'
+author:
+  - 'Chris Tijerina'
+build_requires:
+  Test::Exception: '0'
+  Test::More: '0'
+  strict: '0'
+  warnings: '0'
+configure_requires:
+  ExtUtils::MakeMaker: '0'
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.140640'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: '1.4'
+name: XML-Simple-Sugar
+requires:
+  Data::Dumper: '0'
+  Modern::Perl: '0'
+  Moops: '0'
+  UNIVERSAL::isa: '0'
+  XML::Simple: '0'
+  perl: v5.18.2
+version: 1.0.0
