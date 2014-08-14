@@ -440,6 +440,7 @@ Additionally, this package depends on XML::Simple, which currently has a "do not
 Most of the automagic happens with AUTOLOAD.  Accessors/mutators and method names in this package cannot be used as element names in the XML document.  XML naming rules prohibit the use of elements starting with the string "xml", so I've used this string as a prefix to all accessors/mutators/methods to avoid potential conflicts with AUTOLOAD.  Sorry for the extra characters. :/ 
 
 =head1 REPOSITORY
+
 L<https://github.com/Camspi/XML-Simple-Sugar>
 
 =head1 SEE ALSO
