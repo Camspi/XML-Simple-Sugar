@@ -4,6 +4,7 @@ MANIFEST
 META.yml
 Makefile.PL
 README
+README.mkdn
 dist.ini
 lib/XML/Simple/Sugar.pm
 t/001.t

@@ -2,7 +2,9 @@ use 5.18.2;
 use Modern::Perl;
 use Moops;
 
-class XML::Simple::Sugar 1.0.0 {
+our $VERSION = 1.0.1;
+
+class XML::Simple::Sugar {
     our $AUTOLOAD;
     use XML::Simple;
     use UNIVERSAL::isa;
@@ -285,20 +287,6 @@ class XML::Simple::Sugar 1.0.0 {
 # ABSTRACT: Sugar sprinkled on XML::Simple
 # PODNAME: XML::Simple::Sugar
 
-__END__
-
-=pod
-
-=encoding UTF-8
-
-=head1 NAME
-
-XML::Simple::Sugar - Sugar sprinkled on XML::Simple
-
-=head1 VERSION
-
-version 1.0.0
-
 =head1 SYNOPSIS
 
     use Modern::Perl;
@@ -407,6 +395,7 @@ Returns the root element XML::Simple::Sugar object
 
 Returns the content of the current element
 
+
 =head1 METHODS
 
 =head2 xml_read (XML String)
@@ -466,16 +455,5 @@ L<https://github.com/Camspi/XML-Simple-Sugar>
 * eMortgage Logic, LLC., for allowing me to publish this module to CPAN
 
 =back
-
-=head1 AUTHOR
-
-Chris Tijerina
-
-=head1 COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2014 by eMortgage Logic LLC.
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
 
 =cut

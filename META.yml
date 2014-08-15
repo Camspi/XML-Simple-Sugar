@@ -23,4 +23,8 @@ requires:
   UNIVERSAL::isa: '0'
   XML::Simple: '0'
   perl: v5.18.2
-version: 1.0.0
+resources:
+  bugtracker: https://github.com/Camspi/XML-Simple-Sugar/issues
+  homepage: https://github.com/Camspi/XML-Simple-Sugar
+  repository: https://github.com/Camspi/XML-Simple-Sugar.git
+version: 1.0.1
