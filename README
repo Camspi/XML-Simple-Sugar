@@ -2,7 +2,7 @@ NAME
     XML::Simple::Sugar - Sugar sprinkled on XML::Simple
 
 VERSION
-    version 1.0.1
+    version v1.0.2
 
 SYNOPSIS
         use Modern::Perl;

@@ -2,9 +2,7 @@ use 5.18.2;
 use Modern::Perl;
 use Moops;
 
-our $VERSION = 1.0.1;
-
-class XML::Simple::Sugar {
+class XML::Simple::Sugar 1.0.2 {
     our $AUTOLOAD;
     use XML::Simple;
     use UNIVERSAL::isa;
@@ -22,7 +20,7 @@ class XML::Simple::Sugar {
         'isa'     => Maybe[HashRef|ArrayRef],
         'default' => method { $self->xml_data ? $self->xml_data : {}; }
     );
-    has 'xml_parent' => ( 'is' => 'ro', 'isa' => 'XML::Simple::Sugar' );
+    has 'xml_parent' => ( 'is' => 'ro', 'isa' => InstanceOf['XML::Simple::Sugar'] );
     has 'xml_autovivify' => ( 'is' => 'rw', 'isa' => Bool, default => 1 );
     has 'xml' => (
         'is'      => 'rw',
@@ -48,7 +46,7 @@ class XML::Simple::Sugar {
         );
     }
 
-    method xml_read ($xml) {
+    method xml_read (Str $xml) {
         $self->xml_data(
             $self->xml_xs->XMLin(
                 $xml,
@@ -117,13 +115,13 @@ class XML::Simple::Sugar {
         }
     }
 
-    method xml_nest (XML::Simple::Sugar $xs) {
+    method xml_nest (InstanceOf['XML::Simple::Sugar'] $xs) {
         $self->xml_parent->xml_data->{ $self->xml_node }->[ $self->xml_index ]
           = $xs->xml_data;
         return $self;
     }
 
-    multi method xml_subnode (Str $node, XML::Simple::Sugar $content) {
+    multi method xml_subnode (Str $node, InstanceOf['XML::Simple::Sugar'] $content) {
         $self->xml_data->{$node}->[ $self->xml_index ] = $content->xml_data;
     }
 
@@ -204,7 +202,7 @@ class XML::Simple::Sugar {
                 }
             );
             if ( defined( $content->[1] )
-                && UNIVERSAL::isa( $content->[1], 'XML::Simple::Sugar' ) )
+                && UNIVERSAL::isa( $content->[1], InstanceOf['XML::Simple::Sugar'] ) )
             {
                 $xs->xml_nest( $content->[1] );
             }
