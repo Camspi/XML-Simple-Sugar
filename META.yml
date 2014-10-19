@@ -19,7 +19,7 @@ name: XML-Simple-Sugar
 provides:
   XML::Simple::Sugar:
     file: lib/XML/Simple/Sugar.pm
-    version: v1.0.2
+    version: v1.0.3
 requires:
   Data::Dumper: '0'
   Modern::Perl: '0'
@@ -31,4 +31,4 @@ resources:
   bugtracker: https://github.com/Camspi/XML-Simple-Sugar/issues
   homepage: https://github.com/Camspi/XML-Simple-Sugar
   repository: https://github.com/Camspi/XML-Simple-Sugar.git
-version: v1.0.2
+version: v1.0.3
