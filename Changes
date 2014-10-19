@@ -1,3 +1,5 @@
+1.0.4 - Sync changelog
+1.0.3 - Update description
 1.0.2 - Favor InstanceOf over bare classnames
 1.0.1 - Typos, Dist::Zilla support, README.mkdn
 1.0.0 - Initial release
