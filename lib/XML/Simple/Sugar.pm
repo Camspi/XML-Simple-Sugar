@@ -2,7 +2,7 @@ use 5.18.2;
 use Modern::Perl;
 use Moops;
 
-class XML::Simple::Sugar 1.0.4 {
+class XML::Simple::Sugar 1.0.5 {
     our $AUTOLOAD;
     use XML::Simple;
     use UNIVERSAL::isa;
