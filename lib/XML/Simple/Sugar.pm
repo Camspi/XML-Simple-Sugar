@@ -2,7 +2,7 @@ use 5.18.2;
 use Modern::Perl;
 use Moops;
 
-class XML::Simple::Sugar 1.0.6 {
+class XML::Simple::Sugar 1.0.7 {
     our $AUTOLOAD;
     use XML::Simple;
     use UNIVERSAL::isa;
@@ -388,11 +388,14 @@ Gets or sets the content of the element
 
     $xs->person->first_name->xml_content('Bob');
 
-    # Which can be implicily written
+    # Which can be implicitly written
     $xs->person->first_name('Bob');
 
     # Or using [ index, content, attributes ] notation
-    $xs->person([ 0, 'Bob', undef ]);
+    $xs->person->first_name([ 0, 'Bob', undef ]);
+
+    say $xs->person->first_name->xml_content;
+    # Bob
 
 =head2 xml_attr (HashRef)
 
@@ -400,11 +403,15 @@ Gets or sets the attributes of the element.
 
     $xs->person->xml_attr( { position => 'Accountant' } );
 
-    # Which can be implictly written as...
+    # Which can be implicitly written as...
     $xs->person( { position => 'Accountant' } );
 
     # Or using [ index, content, attributes ] notation
     $xs->person([ 0, undef, { position => 'Accountant' } ]);
+
+    my $attributes = $xs->person->xml_attr;
+    say $attributes->{'position'};
+    # Accountant
 
 =head2 xml_rmattr (Str)
 

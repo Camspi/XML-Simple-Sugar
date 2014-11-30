@@ -2,7 +2,7 @@ NAME
     XML::Simple::Sugar - Sugar sprinkled on XML::Simple
 
 VERSION
-    version v1.0.6
+    version v1.0.7
 
 SYNOPSIS
         use Modern::Perl;
@@ -105,22 +105,29 @@ METHODS
 
         $xs->person->first_name->xml_content('Bob');
 
-        # Which can be implicily written
+        # Which can be implicitly written
         $xs->person->first_name('Bob');
 
         # Or using [ index, content, attributes ] notation
-        $xs->person([ 0, 'Bob', undef ]);
+        $xs->person->first_name([ 0, 'Bob', undef ]);
+
+        say $xs->person->first_name->xml_content;
+        # Bob
 
   xml_attr (HashRef)
     Gets or sets the attributes of the element.
 
         $xs->person->xml_attr( { position => 'Accountant' } );
 
-        # Which can be implictly written as...
+        # Which can be implicitly written as...
         $xs->person( { position => 'Accountant' } );
 
         # Or using [ index, content, attributes ] notation
         $xs->person([ 0, undef, { position => 'Accountant' } ]);
+
+        my $attributes = $xs->person->xml_attr;
+        say $attributes->{'position'};
+        # Accountant
 
   xml_rmattr (Str)
     This method removes the passed scalar argument from the element's list
