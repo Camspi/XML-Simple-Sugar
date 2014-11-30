@@ -2,7 +2,7 @@ use 5.18.2;
 use Modern::Perl;
 use Moops;
 
-class XML::Simple::Sugar 1.0.5 {
+class XML::Simple::Sugar 1.0.6 {
     our $AUTOLOAD;
     use XML::Simple;
     use UNIVERSAL::isa;
@@ -202,7 +202,7 @@ class XML::Simple::Sugar 1.0.5 {
                 }
             );
             if ( defined( $content->[1] )
-                && UNIVERSAL::isa( $content->[1], InstanceOf['XML::Simple::Sugar'] ) )
+                && UNIVERSAL::isa( $content->[1], 'XML::Simple::Sugar' ) )
             {
                 $xs->xml_nest( $content->[1] );
             }
@@ -287,78 +287,66 @@ class XML::Simple::Sugar 1.0.5 {
 
 =head1 SYNOPSIS
 
-The basics...
-
     use Modern::Perl;
-    use Data::Dumper;
     use XML::Simple::Sugar;
     
-    my $xs = XML::Simple::Sugar->new();
+    my $xs = XML::Simple::Sugar->new;
     
-    #Autovivify some elements nested within each other, and set the content of the salary element
-    $xs->company->departments->department([0])->person([0])->salary(60000);
+    # Autovivify some XML elements
+    my $person = $xs->company->departments->department->person;
     
-    my $departments = $xs->company->departments;
-    $departments->department([0])->xml_attr({ name => 'IT Department', manager => 'John Smith' });
-
-    say $xs->xml_write;
-
-    # Or from a child element... (returns a string reflecting the root element's XML)
-    say $departments->xml_write;
- 
-Working with existing XML
-
-    my $xs = XML::Simple::Sugar->new({ xml => '<your_xml>here</your_xml>' });
-
-Setting and retrieving content/attributes
-
-    # Return all person elements in the first department element and say their first names
-    map{ say $_->first_name->xml_content; } $xs->company->departments->department([0])->person(['all']);
+    # Set some content and attributes
+    $person->first_name('John')
+           ->last_name('Smith')
+           ->email('jsmith@example.com')
+           ->salary(60000);
     
-    # Setting the content of elements
-    my $person = $xs->company->departments->department([0])->person([0]);
-    $person->first_name('John')->last_name('Smith')->email('jsmith@example.com');
-    # Or, using xml_content...
-    $person->first_name->xml_content('John');
-    say $person->first_name->xml_content;
-
-    # Setting attributes of an element
-    $xs->company->departments->department([0])->person([0])->salary({ 'jobgrade' => 10, 'exempt' => 1 });
-    # Or, using xml_attr...
-    $person->xml_attr({ skill => 'Perl', skill_level => 'intermediate'  });
-    say Data::Dumper::Dumper($person->xml_attr);
+    $person->xml_attr( { position => 'Engineer' } );
     
-    # Or setting the string contents of an element and attribute values all at once...
-    $person->first_name([0,'John',{'is_nice' => 'true'}]);
- 
-Composing larger documents from other XML::Simple::Sugar objects
+    say $xs->xml_write; 
+    
+    # <?xml version="1.0"?>
+    # <company>
+    #   <departments>
+    #     <department>
+    #       <person position="Engineer">
+    #         <email>jsmith@example.com</email>
+    #         <first_name>John</first_name>
+    #         <last_name>Smith</last_name>
+    #         <salary>60000</salary>
+    #       </person>
+    #     </department>
+    #   </departments>
+    # </company>
 
-    my $xs=XML::Simple::Sugar->new();
-    my $xs2=XML::Simple::Sugar->new();
-    $xs2->table->tr->th([0,'First Name',{ style => 'text-align:left' }]);
-    $xs2->table->tr->th([1,'Last Name']);
-    $xs->html->body->div->h1('Page Title')->xml_attr({ style => 'font-weight:bold' });
-    $xs->html->body->div([1,$xs2]);
 
 =head1 DESCRIPTION
 
-This module is a wrapper around L<XML::Simple> to provide AUTOLOADed accessors to XML nodes.  
-
-=head1 WHY ANOTHER XML MODULE?
-
-I wanted to write/manipulate simple XML payloads with more DWIMmery than what I found in modules available on CPAN (admittedly I didn't look very hard).  If the above syntax doesn't accomplish that for you, you should probably use a different module.
-
-Additionally, this package depends on L<XML::Simple>, which currently has a "do not use this module in new code" notice.  If you are cool with that, then so am I. :)
-
-=head1 PLEASE BE ADVISED
-
-Most of the automagic happens with AUTOLOAD.  Accessors/mutators and method names in this package cannot be used as element names in the XML document.  XML naming rules prohibit the use of elements starting with the string "xml", so I've used this string as a prefix to all accessors/mutators/methods to avoid potential conflicts with AUTOLOAD.  Sorry for the extra characters. :/ 
+This module is a wrapper around L<XML::Simple> to provide AUTOLOADed accessors to XML nodes in a given XML document.  All nodes of the XML document are XML::Simple::Sugar objects having the following attributes and methods.
 
 =head1 ATTRIBUTES
 
-=head2 xml_autovivify (bool)
+=head2 xml (XML Str)
+
+This readonly attribute is for use during instantiation (XML::Simple::Sugar->new({ xml => $xml_string })).  See also L</xml_read>.
+
+=head2 xml_autovivify (Bool DEFAULT true)
 
 This attribute determines on a per element basis whether new attributes or elements may be introduced.  Child elements inherit this setting from their parent.  Setting autovivify to false is useful when working with templates with a strict predefined XML structure. This attribute is true by default.
+
+    my $xs = XML::Simple::Sugar->new(
+      {
+        xml => qq(
+            <strict_document>
+              <foo>bar</foo>
+            </strict_document>
+        ),
+        xml_autovivify => 0,
+      }
+    );
+
+    $xs->strict_document->foo('baz'); # Changes bar to baz.  Ok!
+    $xs->strict_document->biz('a new element'); # Error!  Biz doesn't exist!
 
 =head2 xml_data (XML::Simple compliant Perl representation of an XML document)
 
@@ -366,7 +354,7 @@ This is the Perl representation of the XML.  This is ugly to work with directly 
 
 =head2 xml_index
 
-The index number of an element in a collection 
+The index number of an element in a collection
 
 =head2 xml_node
 
@@ -376,25 +364,17 @@ The name of the current node
 
 The parent XML::Simple::Sugar object to the current element
 
-=head2 xml
-
-This readonly attribute is only useful during instantiation (XML::Simple::Sugar->new({ xml => $xml_string })).  This is primarily intended for working with XML templates, or XML service responses.
-
 =head2 xml_xs
 
-This is underlying XML::Simple object.  If you need to adjust the XML declaration, you can do that by passing an an XML::Simple object with your preferred options to the constructor.  Be wary of setting other XML::Simple options as this module will happily overwrite anything that conflicts with its assumptions.
+This is underlying XML::Simple object.  If you need to adjust the XML declaration, you can do that by passing an an XML::Simple object with your preferred options to the C<new> constructor.  Be wary of setting other XML::Simple options as this module will happily overwrite anything that conflicts with its assumptions.
 
 =head2 xml_root
 
 Returns the root element XML::Simple::Sugar object
 
-=head2 xml_content (String)
-
-Returns the content of the current element
-
 =head1 METHODS
 
-=head2 xml_read (XML String)
+=head2 xml_read (XML Str)
 
 Parses an XML string and sets the data attribute
 
@@ -402,17 +382,96 @@ Parses an XML string and sets the data attribute
 
 Writes out an XML string
 
+=head2 xml_content (Str)
+
+Gets or sets the content of the element
+
+    $xs->person->first_name->xml_content('Bob');
+
+    # Which can be implicily written
+    $xs->person->first_name('Bob');
+
+    # Or using [ index, content, attributes ] notation
+    $xs->person([ 0, 'Bob', undef ]);
+
 =head2 xml_attr (HashRef)
 
-If passed a hash reference, this method will set the attributes of the current element. Otherwise, this method returns a hash reference representing the current element's attributes.
+Gets or sets the attributes of the element.
 
-=head2 xml_rmattr (String)
+    $xs->person->xml_attr( { position => 'Accountant' } );
+
+    # Which can be implictly written as...
+    $xs->person( { position => 'Accountant' } );
+
+    # Or using [ index, content, attributes ] notation
+    $xs->person([ 0, undef, { position => 'Accountant' } ]);
+
+=head2 xml_rmattr (Str)
 
 This method removes the passed scalar argument from the element's list of attributes.
 
 =head2 xml_nest (XML::Simple::Sugar)
 
 Merges another XML::Simple::Sugar object as a child of the current node.
+
+    my $first_name = XML::Simple::Sugar->new({ xml => '<first_name>Bob</first_name>' });
+    $xs->person->xml_nest( $first_name );
+
+    # Or using [ index, content, attributes ] notation
+    $xs->person( [ 0, $first_name, undef ] );
+
+=head1 Collections
+
+When working with a collection of same-named elements, you can access a specific element by index by passing the collection's name an ArrayRef with the index number.  For example:
+
+    my $person2 = $xs->people->person([1]); # Returns the second person element (index 1)
+
+You can also work with the entire collection of individual elements by passing an ArrayRef with the string 'all'.
+
+    my @people = $xs->people->person(['all']); # Returns an array of XML::Simple::Sugar objects
+
+=head1 Using [ index, content, attributes ] Notation
+
+When authoring even simple XML documents, using [ index, content, attributes ] notation allows you to implicitly invoke L</xml_content>, L</xml_attr>, and L</xml_nest> methods on nodes deep within a collection.  For example:
+
+    # Sets the position attribute of the second person
+    $xs->people->person([ 1, undef, { position => 'Engineer' } ]);
+
+    # Sets the third person's second favorite color to orange
+    # with a neon attribute
+    $xs->people->person([ 2 ])->favorite_colors->color([ 1, 'orange', { neon => 1 } ]);
+
+    # Composing large documents from smaller ones
+    my $xs  = XML::Simple::Sugar->new;
+    my $xs2 = XML::Simple::Sugar->new;
+
+    $xs2->table->tr->th([ 0, 'First Name', { style => 'text-align:left' } ]);
+    $xs2->table->tr->th([ 1, 'Last Name' ]);
+
+    $xs->html->body->div([0])->h1('Page Title');
+    $xs->html->body->div([ 1, $xs2 ])
+    say $xs->xml_write;
+
+    # <?xml version="1.0"?>
+    # <html>
+    #   <body>
+    #     <div>
+    #       <h1>Page Title</h1>
+    #     </div>
+    #     <div>
+    #       <table>
+    #         <tr>
+    #           <th style="text-align:left">First Name</th>
+    #           <th>Last Name</th>
+    #         </tr>
+    #       </table>
+    #     </div>
+    #   </body>
+    # </html>
+
+=head1 PLEASE BE ADVISED
+
+Most of the automagic happens with AUTOLOAD.  Accessors/mutators and method names in this package cannot be used as element names in the XML document.  XML naming rules prohibit the use of elements starting with the string "xml", so "xml_" is used as a prefix for all accessors/mutators/methods to avoid potential document conflicts.
 
 =head1 REPOSITORY
 

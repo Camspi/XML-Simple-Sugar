@@ -66,6 +66,15 @@ q|<html><body><div><table><tr><th>title</th></tr></table></div></body></html>|;
 
     is_deeply( $xs5->xml_data, $xs7->xml_data,
         'Can nest XML::Simple::Sugar objects with xml_nest' );
+
+    my $xs8 = XML::Simple::Sugar->new();
+    my $xs9 = XML::Simple::Sugar->new();
+    $xs9->table->tr->th('title');
+    $xs8->html->body->div([ 0, $xs6 ]);
+    my $xs10 = XML::Simple::Sugar->new( { xml => $xml } );
+
+    is_deeply( $xs8->xml_data, $xs10->xml_data,
+        'Can nest XML::Simple::Sugar objects with []' );
 }
 
 sub collections {
