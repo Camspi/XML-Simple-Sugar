@@ -2,7 +2,7 @@ use 5.18.2;
 use Modern::Perl;
 use Moops;
 
-class XML::Simple::Sugar 1.0.7 {
+class XML::Simple::Sugar 1.0.8 {
     our $AUTOLOAD;
     use XML::Simple;
     use UNIVERSAL::isa;
@@ -449,17 +449,20 @@ When authoring even simple XML documents, using [ index, content, attributes ] n
     $xs->people->person([ 2 ])->favorite_colors->color([ 1, 'orange', { neon => 1 } ]);
 
     # Composing large documents from smaller ones
-    my $xs  = XML::Simple::Sugar->new;
+    my $xs  = XML::Simple::Sugar->new( {
+        xml_xs => XML::Simple->new( XMLDecl => '<!DOCTYPE html>' )
+    } );
     my $xs2 = XML::Simple::Sugar->new;
 
     $xs2->table->tr->th([ 0, 'First Name', { style => 'text-align:left' } ]);
     $xs2->table->tr->th([ 1, 'Last Name' ]);
 
     $xs->html->body->div([0])->h1('Page Title');
-    $xs->html->body->div([ 1, $xs2 ])
+    $xs->html->body->div([ 1, $xs2 ]);
+
     say $xs->xml_write;
 
-    # <?xml version="1.0"?>
+    # <!DOCTYPE html>
     # <html>
     #   <body>
     #     <div>
