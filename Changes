@@ -1,3 +1,4 @@
+1.0.9 - Explicitly return undef from xml_subnode
 1.0.8 - Fix XML Decl in html example
 1.0.7 - Pod typos 
 1.0.6 - Improve(?) pod, fix xml_nesting bug

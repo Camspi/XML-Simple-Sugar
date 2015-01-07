@@ -93,6 +93,8 @@ sub collections {
     );
     my @xs = $xs->company->departments->department( [0] )->person( ['all'] );
     ok( scalar @xs == 2, 'Can fetch all elements in a collection' );
+    @xs = $xs->company->departments->department( [0] )->nonexistent( ['all'] );
+    ok( scalar @xs == 0, 'Returns empty list for non-existent collection' );
     ok(
         $xs->company->departments->department( [0] )->person( [1] )
           ->first_name( [ 1, 'John' ] )->xml_content eq 'John',
