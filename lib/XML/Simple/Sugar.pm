@@ -2,7 +2,7 @@ use 5.18.2;
 use Modern::Perl;
 use Moops;
 
-class XML::Simple::Sugar 1.0.9 {
+class XML::Simple::Sugar 1.0.10 {
     our $AUTOLOAD;
     use XML::Simple;
     use UNIVERSAL::isa;
@@ -39,7 +39,7 @@ class XML::Simple::Sugar 1.0.9 {
     );
 
     method xml_write {
-        return $self->xml_xs->XMLout(
+        return $self->xml_root->xml_xs->XMLout(
             $self->xml_root->xml_data,
             KeepRoot   => 1,
             ContentKey => 'xml_content',

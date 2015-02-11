@@ -12,6 +12,7 @@ attr_rmattr();
 autovivify();
 content();
 collections();
+xmldecl();
 done_testing();
 
 sub xml_read_and_xml_write {
@@ -117,4 +118,13 @@ sub attr_rmattr {
     $xs->company->departments->xml_rmattr('name');
     $attr = $xs->company->departments->xml_attr;
     ok( !defined( $attr->{'name'} ), 'Can remove attributes' );
+}
+
+sub xmldecl {
+    my $xs = XML::Simple::Sugar->new( { xml_xs => XML::Simple->new( XMLDecl => 'foo' ) } );
+    my $subnode = $xs->subnode;
+    ok( $subnode->xml_write =~m/^foo/, 'Subnode returns root XMLDecl' );
+
+    $xs = XML::Simple::Sugar->new;
+    ok( $xs->xml_write =~m/\Q<?xml version="1.0"?>\E/, 'Default XMLDecl' );
 }
