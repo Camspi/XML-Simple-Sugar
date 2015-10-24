@@ -1,12 +1,11 @@
-use 5.18.2;
+use 5.18.0;
 use Modern::Perl;
 use Moops;
 
-class XML::Simple::Sugar 1.0.10 {
+class XML::Simple::Sugar 1.0.11 {
     our $AUTOLOAD;
     use XML::Simple;
     use UNIVERSAL::isa;
-    use Data::Dumper;
 
     has 'xml_index' => ( 'is' => 'ro', 'isa' => 'Int', default => 0 );
     has 'xml_node'  => ( 'is' => 'ro', 'isa' => Maybe[Str] );
@@ -179,8 +178,8 @@ class XML::Simple::Sugar 1.0.10 {
             }
             else {
                 unless ( $self->xml_data->{$node} ) {
-                    die qq|$node not in |
-                      . Data::Dumper::Dumper( $self->xml_data );
+                    die qq|$node is not a subnode of |
+                      . $self->xml_parent->xml_node;
                 }
                 unless (
                     UNIVERSAL::isa(
@@ -188,8 +187,8 @@ class XML::Simple::Sugar 1.0.10 {
                     )
                   )
                 {
-                    die qq|Element $content->[0] not in |
-                      . Data::Dumper::Dumper( $self->xml_data->{$node} );
+                    die qq|$content->[0] is not a subnode of |
+                      . $self->xml_node;
                 }
             }
             my $xs = XML::Simple::Sugar->new(
@@ -246,8 +245,8 @@ class XML::Simple::Sugar 1.0.10 {
                 $self->xml_data->{$node}->[0] = {};
             }
             else {
-                die qq|$node not in |
-                  . Data::Dumper::Dumper( $self->xml_data );
+                die qq|$node is not a subnode of |
+                  . $self->xml_node;
             }
         }
 
@@ -276,7 +275,7 @@ class XML::Simple::Sugar 1.0.10 {
     }
 
     method AUTOLOAD ($content?) {
-        my ($node) = $AUTOLOAD =~ m/([^:]*)$/;
+        my ( $node ) = $AUTOLOAD =~ m/.*::(.+)$/;
         $content ? $self->xml_subnode($node, $content) : $self->xml_subnode($node);
     }
 }

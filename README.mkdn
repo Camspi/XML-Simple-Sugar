@@ -4,7 +4,7 @@ XML::Simple::Sugar - Sugar sprinkled on XML::Simple
 
 # VERSION
 
-version v1.0.10
+version v1.0.11
 
 # SYNOPSIS
 
