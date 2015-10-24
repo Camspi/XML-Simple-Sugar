@@ -2,10 +2,11 @@ use 5.18.0;
 use Modern::Perl;
 use Moops;
 
-class XML::Simple::Sugar 1.0.11 {
+class XML::Simple::Sugar 1.1.0 {
     our $AUTOLOAD;
     use XML::Simple;
     use UNIVERSAL::isa;
+    use overload '""' => 'xml_write';
 
     has 'xml_index' => ( 'is' => 'ro', 'isa' => 'Int', default => 0 );
     has 'xml_node'  => ( 'is' => 'ro', 'isa' => Maybe[Str] );

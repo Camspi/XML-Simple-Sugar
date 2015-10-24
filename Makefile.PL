@@ -21,7 +21,8 @@ my %WriteMakefileArgs = (
     "Modern::Perl" => 0,
     "Moops" => 0,
     "UNIVERSAL::isa" => 0,
-    "XML::Simple" => 0
+    "XML::Simple" => 0,
+    "overload" => 0
   },
   "TEST_REQUIRES" => {
     "Test::Exception" => 0,
@@ -29,7 +30,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "v1.0.11",
+  "VERSION" => "v1.1.0",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -44,6 +45,7 @@ my %FallbackPrereqs = (
   "Test::More" => 0,
   "UNIVERSAL::isa" => 0,
   "XML::Simple" => 0,
+  "overload" => 0,
   "strict" => 0,
   "warnings" => 0
 );

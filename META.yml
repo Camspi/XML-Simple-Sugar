@@ -19,18 +19,19 @@ name: XML-Simple-Sugar
 provides:
   XML::Simple::Sugar:
     file: lib/XML/Simple/Sugar.pm
-    version: v1.0.11
+    version: v1.1.0
 requires:
   Modern::Perl: '0'
   Moops: '0'
   UNIVERSAL::isa: '0'
   XML::Simple: '0'
+  overload: '0'
   perl: v5.18.0
 resources:
   bugtracker: https://github.com/Camspi/XML-Simple-Sugar/issues
   homepage: https://github.com/Camspi/XML-Simple-Sugar
   repository: https://github.com/Camspi/XML-Simple-Sugar.git
-version: v1.0.11
+version: v1.1.0
 x_contributors:
   - 'Camspi <amarus18@hotmail.com>'
   - 'Chris Tijerina <amarus18@hotmail.com>'

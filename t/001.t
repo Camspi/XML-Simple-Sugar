@@ -155,4 +155,12 @@ subtest 'soapish' => sub {
       'Soapish names work as elements';
 };
 
+subtest 'String overload' => sub {
+    my $xs = XML::Simple::Sugar->new;
+    $xs->foo('bar');
+
+    my $xs2 = XML::Simple::Sugar->new( { xml => "$xs" } );
+    is_deeply $xs->xml_data, $xs2->xml_data, 'Stringification works';
+};
+
 done_testing;
