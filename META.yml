@@ -10,7 +10,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: '0'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 5.032, CPAN::Meta::Converter version 2.150001'
+generated_by: 'Dist::Zilla version 6.009, CPAN::Meta::Converter version 2.150005'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -19,7 +19,7 @@ name: XML-Simple-Sugar
 provides:
   XML::Simple::Sugar:
     file: lib/XML/Simple/Sugar.pm
-    version: v1.1.0
+    version: v1.1.1
 requires:
   Modern::Perl: '0'
   Moops: '0'
@@ -31,8 +31,8 @@ resources:
   bugtracker: https://github.com/Camspi/XML-Simple-Sugar/issues
   homepage: https://github.com/Camspi/XML-Simple-Sugar
   repository: https://github.com/Camspi/XML-Simple-Sugar.git
-version: v1.1.0
+version: v1.1.1
 x_contributors:
   - 'Camspi <amarus18@hotmail.com>'
-  - 'Chris Tijerina <amarus18@hotmail.com>'
   - 'Chris Tijerina <ctijerina@emortgagelogic.com>'
+x_serialization_backend: 'YAML::Tiny version 1.70'

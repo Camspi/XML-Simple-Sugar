@@ -2,7 +2,7 @@ use 5.18.0;
 use Modern::Perl;
 use Moops;
 
-class XML::Simple::Sugar 1.1.0 {
+class XML::Simple::Sugar 1.1.1 {
     our $AUTOLOAD;
     use XML::Simple;
     use UNIVERSAL::isa;
@@ -277,6 +277,7 @@ class XML::Simple::Sugar 1.1.0 {
 
     method AUTOLOAD ($content?) {
         my ( $node ) = $AUTOLOAD =~ m/.*::(.+)$/;
+        return if $node eq 'DESTROY';
         $content ? $self->xml_subnode($node, $content) : $self->xml_subnode($node);
     }
 }
